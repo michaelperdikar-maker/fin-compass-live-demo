@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FIN COMPASS V4 — Institutional Investor Edition</title>
+<style>
+:root{--bg:#061018;--panel:#0d1924;--panel2:#122331;--line:#263e50;--text:#eef4f8;--muted:#8fa6b6;--a:#39d0ba;--b:#6fa8ff;--ok:#62e1a0;--w:#ffc76a;--d:#ff7d7d;--sh:0 18px 48px rgba(0,0,0,.3)}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#051018,#0a1621 55%,#0c1924);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}button,input,select,textarea{font:inherit}
+#splash{position:fixed;inset:0;z-index:50;background:#061018;display:grid;place-items:center;transition:.6s}.splashbox{text-align:center;width:min(620px,86vw)}.splashlogo{font-size:44px;font-weight:900;letter-spacing:.08em}.splashlogo span{color:var(--a)}.splashbox p{color:var(--muted)}.load{height:8px;background:#10202b;border:1px solid var(--line);border-radius:20px;overflow:hidden}.load i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--b));animation:load 2.3s forwards}@keyframes load{to{width:100%}}
+.app{display:grid;grid-template-columns:275px 1fr;min-height:100vh}.side{background:#07121b;border-right:1px solid var(--line);padding:20px 16px;position:sticky;top:0;height:100vh;overflow:auto}.brand{display:flex;gap:12px;align-items:center;margin-bottom:23px}.logo{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--a),var(--b));color:#03120f;font-weight:900}.brand h1{font-size:16px;margin:0;letter-spacing:.08em}.brand small{color:var(--muted)}
+.nav{display:grid;gap:7px}.nav button{background:transparent;border:1px solid transparent;color:var(--muted);padding:11px 12px;text-align:left;border-radius:10px;cursor:pointer}.nav button:hover,.nav button.active{background:#122331;border-color:#294557;color:#fff}
+.status{margin-top:20px;padding:13px;border:1px solid var(--line);border-radius:13px;background:#0b1822;font-size:12px}.sr{display:flex;justify-content:space-between;margin:8px 0;color:var(--muted)}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok);margin-right:6px}
+.main{padding:22px;overflow:hidden}.top{display:flex;justify-content:space-between;gap:14px;align-items:center;margin-bottom:18px}.top h2{margin:0}.top p{margin:5px 0 0;color:var(--muted)}.acts{display:flex;gap:9px;flex-wrap:wrap}.btn{border:1px solid #2b4659;background:#132535;color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer}.btn.primary{border:none;background:linear-gradient(135deg,#2cc7b1,#4e8df5);color:#03120f;font-weight:800}
+.view{display:none}.view.active{display:block}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:15px}.s3{grid-column:span 3}.s4{grid-column:span 4}.s5{grid-column:span 5}.s6{grid-column:span 6}.s7{grid-column:span 7}.s8{grid-column:span 8}.s12{grid-column:span 12}
+.card{background:linear-gradient(180deg,rgba(17,32,45,.97),rgba(10,23,34,.97));border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh);padding:18px}.card h3{margin:0 0 13px}.ey{font-size:11px;color:var(--a);font-weight:800;letter-spacing:.13em;text-transform:uppercase}.muted{color:var(--muted)}
+.kpi .lab{font-size:12px;color:var(--muted)}.kpi .val{font-size:28px;font-weight:850;margin:8px 0}.delta{font-size:12px;color:var(--a)}
+.fg{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:12px;color:var(--muted)}.field input,.field select,.field textarea{width:100%;background:#081622;border:1px solid #2a4558;border-radius:9px;color:#fff;padding:10px}.field textarea{min-height:80px}
+.row{display:flex;justify-content:space-between;gap:15px;padding:9px 0;border-bottom:1px solid rgba(52,77,94,.5);font-size:13px}.row:last-child{border-bottom:none}.badge{font-size:11px;padding:4px 8px;border-radius:20px;background:#1a3040}.ok{color:var(--ok)}.warn{color:var(--w)}.danger{color:var(--d)}
+.prog{height:9px;border-radius:20px;overflow:hidden;background:#07131c;border:1px solid #243b4c}.fill{height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--b));transition:.5s}
+.flow{display:grid;grid-template-columns:repeat(8,1fr);gap:8px}.step{padding:11px 8px;border:1px solid #294153;background:#0b1924;border-radius:10px;text-align:center;font-size:11px}.step.done{border-color:var(--ok);background:#0e241e}.step.run{border-color:var(--b);box-shadow:0 0 18px rgba(110,168,255,.15)}
+.log{height:246px;overflow:auto;background:#06121b;border:1px solid #20394b;border-radius:10px;padding:10px;font:12px/1.55 Consolas,monospace}.ll{display:grid;grid-template-columns:62px 1fr;gap:8px}.tm{color:#6f8a9e}
+.tblwrap{overflow:auto}.tbl{width:100%;border-collapse:collapse;font-size:12px}.tbl th,.tbl td{padding:9px;border-bottom:1px solid #263f51;text-align:right}.tbl th:first-child,.tbl td:first-child{text-align:left}.tbl th{color:#9fb3c1}
+.chart{height:155px;display:flex;align-items:flex-end;gap:9px}.bar{flex:1;background:linear-gradient(180deg,var(--b),#265b96);border-radius:7px 7px 2px 2px;min-height:5px;transition:.5s}.bl{text-align:center;color:var(--muted);font-size:10px;margin-top:5px}
+.report{background:#f7f9fb;color:#17212a;border-radius:12px;padding:28px;min-height:520px}.report h1,.report h2,.report h3{color:#10202b}.report p,.report li{line-height:1.55}.report .cover{border-bottom:3px solid #1d7c77;padding-bottom:18px;margin-bottom:24px}.report table{width:100%;border-collapse:collapse}.report th,.report td{border:1px solid #cbd5dc;padding:7px;text-align:right}.report th:first-child,.report td:first-child{text-align:left}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.tabs button{padding:8px 10px;border-radius:9px;border:1px solid #2a4558;background:#0c1b27;color:#a9bdca;cursor:pointer}.tabs button.active{color:#fff;border-color:var(--a)}
+.toast{position:fixed;right:22px;bottom:22px;background:#102434;border:1px solid #31516a;padding:14px 16px;border-radius:11px;opacity:0;transform:translateY(20px);transition:.3s;pointer-events:none}.toast.show{opacity:1;transform:none}.footer{color:var(--muted);text-align:center;font-size:11px;padding:22px}
+@media(max-width:1100px){.app{grid-template-columns:1fr}.side{display:none}.s3,.s4,.s5,.s6,.s7,.s8{grid-column:span 12}.flow{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div id="splash"><div class="splashbox"><div class="splashlogo">FIN <span>COMPASS</span></div><h2>V4 Institutional Operating System</h2><p>Institutional Investor Edition</p><div class="load"><i></i></div><p>Initializing Decision Engines · Loading Financial Models · Preparing Investor Environment</p><button id="skipSplash" style="margin-top:18px;border:1px solid #2b4659;background:#132535;color:#fff;padding:10px 16px;border-radius:10px;cursor:pointer">Enter Platform</button></div></div>
+<div class="app">
+<aside class="side">
+<div class="brand"><div class="logo">FC</div><div><h1>FIN COMPASS</h1><small>Institutional Investor Edition</small></div></div>
+<div class="nav" id="nav">
+<button class="active" data-v="dashboard">Institutional Dashboard</button>
+<button data-v="assumptions">Assumption Control Center</button>
+<button data-v="company">Corporate Profile</button>
+<button data-v="business">Business Plan</button>
+<button data-v="market">Market Plan</button>
+<button data-v="financials">P&L / Cash Flow</button>
+<button data-v="valuation">Valuation & Dilution</button>
+<button data-v="risk">Risk & Due Diligence</button>
+<button data-v="funding">Funding & Investors</button>
+<button data-v="reports">Investment Reports</button>
+</div>
+<div class="status"><div class="ey">Platform Status</div><div class="sr"><span><span class="dot"></span>FIN COMPASS Core</span><b>Online</b></div><div class="sr"><span>Decision Engines</span><b>14 / 14</b></div><div class="sr"><span>Shared Project Model</span><b>Active</b></div><div class="sr"><span>Running Jobs</span><b id="jobs">0</b></div></div>
+</aside>
+
+<main class="main">
+<div class="top"><div><h2 id="title">Institutional Dashboard</h2><p id="sub">One change updates the complete investment case.</p></div><div class="acts"><button class="btn" id="loadCase">Load FIN COMPASS Case</button><button class="btn primary" id="run">Recalculate Entire Platform</button></div></div>
+
+<section class="view active" id="v-dashboard">
+<div class="grid">
+<div class="card s7"><div class="ey">Investor Mandate</div><h3>FIN COMPASS Holding LLC</h3><p class="muted">Institutional assessment of a global Financial Intelligence Operating System.</p>
+<div class="prog"><div class="fill" id="pfill"></div></div><div class="row"><span id="phase">Ready</span><b id="pct">0%</b></div>
+<br><div class="flow">
+<div class="step" data-s="Data">Data<br><span>Pending</span></div><div class="step" data-s="Business">Business Plan<br><span>Pending</span></div><div class="step" data-s="Market">Market<br><span>Pending</span></div><div class="step" data-s="P&L">P&L<br><span>Pending</span></div><div class="step" data-s="Cash">Cash Flow<br><span>Pending</span></div><div class="step" data-s="Valuation">Valuation<br><span>Pending</span></div><div class="step" data-s="Risk">Risk<br><span>Pending</span></div><div class="step" data-s="Reports">Reports<br><span>Pending</span></div>
+</div></div>
+<div class="card s5"><div class="ey">FIN COMPASS Orchestrator</div><h3>Live decision activity</h3><div class="log" id="log"></div></div>
+
+<div class="card kpi s3"><div class="lab">Funding Round</div><div class="val" id="kFunding">€7.0M</div><div class="delta">Development capital</div></div>
+<div class="card kpi s3"><div class="lab">Enterprise Value</div><div class="val" id="kEV">€50.0M</div><div class="delta">Dynamic valuation</div></div>
+<div class="card kpi s3"><div class="lab">Investor Ownership</div><div class="val" id="kDilution">12.3%</div><div class="delta">Post-money basis</div></div>
+<div class="card kpi s3"><div class="lab">Investment Score</div><div class="val" id="kScore">0/100</div><div class="delta">Composite decision score</div></div>
+
+<div class="card s4"><h3>Revenue Forecast</h3><div class="chart" id="dashChart"></div></div>
+<div class="card s4"><h3>Decision Summary</h3><div id="summary"><div class="row"><span>Market Potential</span><b>Pending</b></div><div class="row"><span>Financial Strength</span><b>Pending</b></div><div class="row"><span>Risk Profile</span><b>Pending</b></div><div class="row"><span>Investor Readiness</span><b>Pending</b></div></div></div>
+<div class="card s4"><h3>Live Outputs</h3><div id="outputs"><div class="row"><span>Business Plan</span><span class="badge">Pending</span></div><div class="row"><span>Market Plan</span><span class="badge">Pending</span></div><div class="row"><span>Financial Model</span><span class="badge">Pending</span></div><div class="row"><span>Investment Memorandum</span><span class="badge">Pending</span></div></div></div>
+</div>
+</section>
+
+<section class="view" id="v-assumptions">
+<div class="grid">
+<div class="card s7"><div class="ey">Shared Data Model</div><h3>Assumption Control Center</h3><div class="fg">
+<div class="field"><label>Funding Round (€)</label><input id="funding" type="number" value="7000000"></div>
+<div class="field"><label>Pre-Money Valuation (€)</label><input id="premoney" type="number" value="50000000"></div>
+<div class="field"><label>Year 1 Revenue (€)</label><input id="rev1" type="number" value="141400000"></div>
+<div class="field"><label>Annual Revenue Growth (%)</label><input id="growth" type="number" value="28"></div>
+<div class="field"><label>EBITDA Margin (%)</label><input id="margin" type="number" value="79.7"></div>
+<div class="field"><label>Valuation Revenue Multiple</label><input id="multiple" type="number" step="0.1" value="0.35"></div>
+<div class="field"><label>WACC / Discount Rate (%)</label><input id="wacc" type="number" value="12"></div>
+<div class="field"><label>Execution Risk (0–100)</label><input id="riskInput" type="number" value="42"></div>
+<div class="field"><label>Countries Year 1</label><input id="countries" type="number" value="25"></div>
+<div class="field"><label>Enterprise Clients Year 1</label><input id="clients" type="number" value="25"></div>
+</div><br><button class="btn primary" onclick="recalc(true)">Apply to Entire Platform</button></div>
+<div class="card s5"><h3>Immediate Impact</h3><div class="row"><span>Post-Money Valuation</span><b id="aPost">€57.0M</b></div><div class="row"><span>Investor Ownership</span><b id="aDil">12.3%</b></div><div class="row"><span>Year 5 Revenue</span><b id="aRev5">€379.6M</b></div><div class="row"><span>Year 5 EBITDA</span><b id="aEbitda5">€302.5M</b></div><div class="row"><span>Implied EV</span><b id="aEV">€50.0M</b></div><p class="muted">Every change updates all sections, tables and reports.</p></div>
+</div>
+</section>
+
+<section class="view" id="v-company"><div class="grid"><div class="card s7"><h3>Corporate Profile</h3><div class="fg"><div class="field"><label>Company</label><input value="FIN COMPASS HOLDING LLC"></div><div class="field"><label>Jurisdiction</label><input value="Wyoming, USA"></div><div class="field"><label>Industry</label><input value="Financial Intelligence / Enterprise Software"></div><div class="field"><label>Stage</label><input value="Seed"></div><div class="field"><label>Share Capital</label><input value="USD 20,000,000"></div><div class="field"><label>Target Markets</label><input id="companyCountries" value="25 countries"></div><div class="field full"><label>Business Model</label><textarea>SaaS, institutional licensing, white label, API licensing, B2B/B2G and international franchise.</textarea></div></div></div><div class="card s5"><h3>Corporate Assessment</h3><div class="row"><span>Company Health</span><b id="cHealth">82 / 100</b></div><div class="row"><span>Funding Readiness</span><b id="cReady">Pending</b></div><div class="row"><span>Commercial Scalability</span><b class="ok">High</b></div><div class="row"><span>Institutional Readiness</span><b id="cInst">Pending</b></div></div></div></section>
+
+<section class="view" id="v-business"><div class="card"><h3>Dynamic Business Plan</h3><div id="businessText"></div></div></section>
+<section class="view" id="v-market"><div class="grid"><div class="card s7"><h3>Market Plan</h3><div id="marketText"></div></div><div class="card s5"><h3>Market KPIs</h3><div class="row"><span>Launch Countries</span><b id="mCountries">25</b></div><div class="row"><span>Enterprise Clients Y1</span><b id="mClients">25</b></div><div class="row"><span>Target Segments</span><b>Banks / SMEs / Investors</b></div><div class="row"><span>Expansion Model</span><b>License + Franchise</b></div></div></div></section>
+
+<section class="view" id="v-financials"><div class="grid"><div class="card s12"><h3>Five-Year P&L</h3><div class="tblwrap"><table class="tbl"><thead><tr><th>Year</th><th>Revenue</th><th>EBITDA</th><th>EBITDA Margin</th><th>Net Cash Flow</th><th>Closing Cash</th></tr></thead><tbody id="pnlBody"></tbody></table></div></div><div class="card s6"><h3>Revenue & EBITDA</h3><div class="chart" id="finChart"></div></div><div class="card s6"><h3>Financial Interpretation</h3><p id="finText"></p></div></div></section>
+
+<section class="view" id="v-valuation"><div class="grid"><div class="card s5"><h3>Valuation Methods</h3><div class="row"><span>Revenue Multiple EV</span><b id="vMultiple">—</b></div><div class="row"><span>DCF Proxy EV</span><b id="vDCF">—</b></div><div class="row"><span>Management Case</span><b id="vMgmt">—</b></div><div class="row"><span>Blended Enterprise Value</span><b id="vBlend">—</b></div></div><div class="card s7"><h3>Equity & Dilution</h3><div class="row"><span>Pre-Money</span><b id="vPre">—</b></div><div class="row"><span>New Capital</span><b id="vFund">—</b></div><div class="row"><span>Post-Money</span><b id="vPost">—</b></div><div class="row"><span>Investor Ownership</span><b id="vDil">—</b></div><div class="row"><span>Founder / Existing Owners</span><b id="vFounder">—</b></div><p id="valuationText" class="muted"></p></div></div></section>
+
+<section class="view" id="v-risk"><div class="grid"><div class="card s4"><h3>Risk Scores</h3><div class="row"><span>Technology</span><b id="rTech">—</b></div><div class="row"><span>Execution</span><b id="rExec">—</b></div><div class="row"><span>Commercial</span><b id="rComm">—</b></div><div class="row"><span>Financial</span><b id="rFin">—</b></div><div class="row"><span>Overall</span><b id="rOverall">—</b></div></div><div class="card s4"><h3>Due Diligence Findings</h3><ul><li>Strong founder financial and risk experience.</li><li>Large platform scope requires phased execution.</li><li>Forecasts require commercial validation.</li><li>Independent technology verification is essential.</li></ul></div><div class="card s4"><h3>Mitigation Plan</h3><ul><li>Milestone-based funding release.</li><li>Independent technical and IP audit.</li><li>Pilot customers before broad rollout.</li><li>Board reporting and budget controls.</li></ul></div></div></section>
+
+<section class="view" id="v-funding"><div class="grid"><div class="card s6"><h3>Dynamic Use of Funds</h3><div class="tblwrap"><table class="tbl"><thead><tr><th>Category</th><th>%</th><th>Amount</th></tr></thead><tbody id="fundBody"></tbody></table></div></div><div class="card s6"><h3>Investor Matching</h3><div id="investors"></div></div><div class="card s12"><h3>Funding Strategy</h3><p id="fundText"></p></div></div></section>
+
+<section class="view" id="v-reports"><div class="tabs" id="tabs"><button class="active" data-r="business">Business Plan</button><button data-r="market">Market Plan</button><button data-r="pnl">P&L & Cash Flow</button><button data-r="valuation">Valuation Report</button><button data-r="memo">Investment Memorandum</button></div><div class="acts" style="margin-bottom:12px"><button class="btn" onclick="window.print()">Print / Save PDF</button><button class="btn primary" onclick="downloadReport()">Download Report Text</button></div><div class="report" id="report"></div></section>
+<div class="footer">FIN COMPASS V4 Institutional Operating System — Institutional Investor Edition</div>
+</main></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id), money=n=>"€"+(n/1e6).toFixed(1)+"M", pct=n=>n.toFixed(1)+"%";
+let state={}, timers=[], currentReport="business";
+const alloc=[["MVP Development",30],["FIN COMPASS AI Core",20],["25-Country Rollout",15],["Franchise Infrastructure",10],["Sales & Marketing",12.5],["Legal / IP",5],["Operating Reserve",7.5]];
+function nav(v){document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));$("v-"+v).classList.add("active");document.querySelectorAll("#nav button").forEach(x=>x.classList.toggle("active",x.dataset.v===v));let n={dashboard:["Institutional Dashboard","One change updates the complete investment case."],assumptions:["Assumption Control Center","Change the data once; every model and report recalculates."],company:["Corporate Profile","Common corporate record used across the platform."],business:["Business Plan","Dynamic plan generated from the shared project model."],market:["Market Plan","Market, customer and expansion strategy."],financials:["P&L / Cash Flow","Integrated five-year financial model."],valuation:["Valuation & Dilution","Dynamic enterprise value and equity impact."],risk:["Risk & Due Diligence","Risk scoring, findings and mitigation."],funding:["Funding & Investors","Use of funds, funding strategy and investor fit."],reports:["Investment Reports","All investor-ready documents from the same data model."]};$("title").textContent=n[v][0];$("sub").textContent=n[v][1]}
+document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>nav(b.dataset.v));
+function toast(x){$("toast").textContent=x;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),1800)}
+function log(x){let d=new Date(),e=document.createElement("div");e.className="ll";e.innerHTML=`<span class=tm>${d.toLocaleTimeString([],{hour12:false})}</span><span>${x}</span>`;$("log").appendChild(e);$("log").scrollTop=$("log").scrollHeight}
+function setP(p,t){$("pfill").style.width=p+"%";$("pct").textContent=p+"%";$("phase").textContent=t}
+function step(n,s){let e=[...document.querySelectorAll(".step")].find(x=>x.dataset.s===n);e.classList.remove("run","done");e.querySelector("span").textContent=s;if(s==="Running")e.classList.add("run");if(s==="Completed")e.classList.add("done")}
+function inputs(){return {funding:+$("funding").value,premoney:+$("premoney").value,rev1:+$("rev1").value,growth:+$("growth").value/100,margin:+$("margin").value/100,multiple:+$("multiple").value,wacc:+$("wacc").value/100,risk:+$("riskInput").value,countries:+$("countries").value,clients:+$("clients").value}}
+function calc(){let x=inputs(),rev=[],eb=[],cf=[],cash=[],c=0;for(let i=0;i<5;i++){let r=x.rev1*Math.pow(1+x.growth,i),e=r*x.margin,n=e*.78;c+=n;rev.push(r);eb.push(e);cf.push(n);cash.push(c)}let multEV=rev[0]*x.multiple,dcf=cf.reduce((a,v,i)=>a+v/Math.pow(1+x.wacc,i+1),0),blend=(multEV+dcf+x.premoney)/3,post=x.premoney+x.funding,dil=x.funding/post,score=Math.max(45,Math.min(96,Math.round(92-x.risk*.28+x.growth*20+x.margin*8)));return {...x,rev,eb,cf,cash,multEV,dcf,blend,post,dil,score}}
+function bars(id,vals){$(id).innerHTML=vals.map((v,i)=>`<div style="flex:1"><div class=bar style="height:${25+i*14}%"></div><div class=bl>Y${i+1}</div></div>`).join("")}
+function recalc(showToast=false){state=calc();renderAll();if(showToast){log("Shared assumptions updated");log("Business Plan, P&L, Cash Flow, Valuation, Risk, Funding and Reports recalculated");toast("Entire FIN COMPASS platform updated")}}
+function renderAll(){
+let s=state;
+$("kFunding").textContent=money(s.funding);$("kEV").textContent=money(s.blend);$("kDilution").textContent=pct(s.dil*100);$("kScore").textContent=s.score+"/100";
+$("aPost").textContent=money(s.post);$("aDil").textContent=pct(s.dil*100);$("aRev5").textContent=money(s.rev[4]);$("aEbitda5").textContent=money(s.eb[4]);$("aEV").textContent=money(s.blend);
+$("companyCountries").value=s.countries+" countries";$("mCountries").textContent=s.countries;$("mClients").textContent=s.clients;
+bars("dashChart",s.rev);bars("finChart",s.rev);
+$("pnlBody").innerHTML=s.rev.map((r,i)=>`<tr><td>Year ${i+1}</td><td>${money(r)}</td><td>${money(s.eb[i])}</td><td>${pct(s.margin*100)}</td><td>${money(s.cf[i])}</td><td>${money(s.cash[i])}</td></tr>`).join("");
+$("vMultiple").textContent=money(s.multEV);$("vDCF").textContent=money(s.dcf);$("vMgmt").textContent=money(s.premoney);$("vBlend").textContent=money(s.blend);$("vPre").textContent=money(s.premoney);$("vFund").textContent=money(s.funding);$("vPost").textContent=money(s.post);$("vDil").textContent=pct(s.dil*100);$("vFounder").textContent=pct((1-s.dil)*100);
+$("valuationText").textContent=`At a ${money(s.premoney)} pre-money valuation and ${money(s.funding)} new capital, the investor receives ${pct(s.dil*100)}. The blended analytical enterprise value is ${money(s.blend)}.`;
+let overall=Math.round((s.risk+45+38+35)/4);$("rTech").textContent="45 / 100";$("rExec").textContent=s.risk+" / 100";$("rComm").textContent="38 / 100";$("rFin").textContent="35 / 100";$("rOverall").textContent=overall+" / 100 — "+(overall<40?"Low":"Medium");
+$("fundBody").innerHTML=alloc.map(a=>`<tr><td>${a[0]}</td><td>${a[1]}%</td><td>${money(s.funding*a[1]/100)}</td></tr>`).join("");
+let match=Math.max(70,Math.min(96,s.score+4));$("investors").innerHTML=[["Strategic Family Office",match],["Enterprise Software Investor",match-3],["Financial Services Investor",match-5],["Institutional Technology Partner",match-8]].map(x=>`<div class=row><span>${x[0]}</span><b class=ok>${x[1]}%</b></div>`).join("");
+$("fundText").textContent=`FIN COMPASS seeks ${money(s.funding)} of seed capital. The preferred structure is milestone-based equity funding, with capital released against functional MVP, technology audit, IP verification, pilot clients and international rollout milestones.`;
+$("businessText").innerHTML=`<h2>Executive Summary</h2><p>FIN COMPASS is a Financial Intelligence Operating System combining business planning, market intelligence, financial modelling, valuation, risk, due diligence, funding and institutional reporting. The current investment case seeks ${money(s.funding)} at a ${money(s.premoney)} pre-money valuation.</p><h2>Business Model</h2><p>SaaS, institutional licensing, white label, API licensing, B2B/B2G and international franchise.</p><h2>Financial Case</h2><p>Year 1 revenue is ${money(s.rev[0])}, growing at ${(s.growth*100).toFixed(0)}% annually to ${money(s.rev[4])} by Year 5, with a target EBITDA margin of ${pct(s.margin*100)}.</p><h2>Investment Use</h2><p>Capital is allocated across MVP, FIN COMPASS AI Core, international rollout, franchise infrastructure, sales, legal/IP and operating reserve.</p>`;
+$("marketText").innerHTML=`<h2>Market Position</h2><p>FIN COMPASS operates at the intersection of financial services, enterprise software, professional advisory and intelligent automation.</p><h2>Go-to-Market</h2><p>The base scenario launches in ${s.countries} countries and targets ${s.clients} enterprise clients in Year 1 through direct sales, licensing, white-label partnerships and franchise distribution.</p><h2>Target Customers</h2><p>Banks, SMEs, investors, family offices, accountants, advisers, public agencies and enterprise technology partners.</p>`;
+$("finText").textContent=`The model generates Year 5 revenue of ${money(s.rev[4])}, EBITDA of ${money(s.eb[4])} and cumulative closing cash of ${money(s.cash[4])}. These are management assumptions and should be tested through downside, base and upside scenarios before investment reliance.`;
+$("summary").innerHTML=`<div class=row><span>Market Potential</span><b class=ok>Very High</b></div><div class=row><span>Financial Strength</span><b class=ok>${s.score>85?"Strong":"Moderate"}</b></div><div class=row><span>Risk Profile</span><b class=warn>${overall<40?"Low":"Medium–Managed"}</b></div><div class=row><span>Investor Readiness</span><b class=ok>${s.score}%</b></div>`;
+$("cReady").textContent=s.score+"%";$("cInst").textContent=s.score>85?"High":"Moderate";
+renderReport(currentReport)
+}
+function runWorkflow(){
+  timers.forEach(clearTimeout);
+  timers=[];
+  $("log").innerHTML="";
+  $("jobs").textContent="6";
+  document.querySelectorAll(".step").forEach(e=>{
+    e.classList.remove("run","done");
+    e.querySelector("span").textContent="Pending";
+  });
+  setP(4,"Loading FIN COMPASS case");
+  log("Institutional mandate received");
+
+  const seq=[
+    ["Data",12,"Loading shared project model","Corporate, market and financial data loaded"],
+    ["Business",25,"Generating Business Plan","Business plan updated"],
+    ["Market",38,"Running Market Intelligence","Market plan updated"],
+    ["P&L",51,"Building P&L model","Five-year P&L generated"],
+    ["Cash",64,"Calculating Cash Flow","Cash flow and liquidity updated"],
+    ["Valuation",77,"Calculating Valuation","Enterprise value and dilution updated"],
+    ["Risk",89,"Risk and Due Diligence","Risk profile and mitigation updated"],
+    ["Reports",100,"Generating Investor Package","All reports generated"]
+  ];
+
+  seq.forEach((q,i)=>{
+    timers.push(setTimeout(()=>{
+      if(i) step(seq[i-1][0],"Completed");
+      step(q[0],"Running");
+      setP(q[1],q[2]);
+      log(q[3]);
+
+      if(i===seq.length-1){
+        step(q[0],"Completed");
+        $("jobs").textContent="0";
+        $("outputs").innerHTML=
+          '<div class=row><span>Business Plan</span><span class="badge ok">Ready</span></div>'+
+          '<div class=row><span>Market Plan</span><span class="badge ok">Ready</span></div>'+
+          '<div class=row><span>Financial Model</span><span class="badge ok">Ready</span></div>'+
+          '<div class=row><span>Investment Memorandum</span><span class="badge ok">Ready</span></div>';
+        toast("FIN COMPASS investment package ready");
+      }
+    },700+i*780));
+  });
+}
+function report(type){let s=state, rows=s.rev.map((r,i)=>`<tr><td>Year ${i+1}</td><td>${money(r)}</td><td>${money(s.eb[i])}</td><td>${money(s.cf[i])}</td></tr>`).join("");
+if(type==="business")return `<div class=cover><div class=ey>FIN COMPASS Generated Report</div><h1>Integrated Business Plan</h1><p>Institutional Investor Edition</p></div>${$("businessText").innerHTML}<h2>Investment Conclusion</h2><p>The opportunity is attractive but execution-sensitive. Recommended conditions include milestone-based funding, technical audit, IP verification and pilot customer validation.</p>`;
+if(type==="market")return `<div class=cover><div class=ey>FIN COMPASS Generated Report</div><h1>Market Plan</h1></div>${$("marketText").innerHTML}<h2>Commercial Risk</h2><p>The core market risk is execution rather than demand: product reliability, customer acquisition, partner performance and international rollout discipline.</p>`;
+if(type==="pnl")return `<div class=cover><div class=ey>FIN COMPASS Generated Report</div><h1>P&L and Cash Flow</h1></div><table><thead><tr><th>Year</th><th>Revenue</th><th>EBITDA</th><th>Net Cash Flow</th></tr></thead><tbody>${rows}</tbody></table><p>Growth assumption: ${pct(s.growth*100)}. EBITDA margin: ${pct(s.margin*100)}. Closing cash Year 5: ${money(s.cash[4])}.</p>`;
+if(type==="valuation")return `<div class=cover><div class=ey>FIN COMPASS Generated Report</div><h1>Valuation Report</h1></div><p>Revenue multiple value: ${money(s.multEV)}. DCF proxy value: ${money(s.dcf)}. Management case: ${money(s.premoney)}. Blended enterprise value: ${money(s.blend)}.</p><h2>Equity Impact</h2><p>New capital of ${money(s.funding)} at a pre-money valuation of ${money(s.premoney)} produces post-money value of ${money(s.post)} and investor ownership of ${pct(s.dil*100)}.</p>`;
+return `<div class=cover><div class=ey>FIN COMPASS Investment Memorandum</div><h1>Investment Committee Summary</h1></div><h2>Transaction</h2><p>${money(s.funding)} seed investment at ${money(s.premoney)} pre-money valuation. Investor ownership: ${pct(s.dil*100)}.</p><h2>Investment Thesis</h2><ul><li>Global financial intelligence platform</li><li>Multiple recurring and licensing revenue streams</li><li>Strong founder domain expertise</li><li>High international scalability</li></ul><h2>Main Risks</h2><ul><li>Large development scope</li><li>Execution and technology delivery</li><li>Forecast validation</li><li>Regulatory and integration complexity</li></ul><h2>Recommendation</h2><p>Proceed to structured investment due diligence with milestone-based capital release.</p>`}
+function renderReport(t){currentReport=t;$("report").innerHTML=report(t)}
+document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#tabs button").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderReport(b.dataset.r)});
+function downloadReport(){let blob=new Blob([$("report").innerText],{type:"text/plain;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="FIN_COMPASS_V4_Investment_Report.txt";a.click();URL.revokeObjectURL(a.href)}
+$("run").onclick=()=>{recalc();runWorkflow()};$("loadCase").onclick=()=>{recalc(true);runWorkflow()};
+function closeSplash(){
+  const splash=$("splash");
+  if(!splash) return;
+  splash.style.opacity="0";
+  setTimeout(()=>{ if(splash && splash.parentNode) splash.remove(); },650);
+}
+const skipButton=$("skipSplash");
+if(skipButton) skipButton.addEventListener("click",closeSplash);
+window.addEventListener("load",()=>setTimeout(closeSplash,900));
+setTimeout(closeSplash,3200);
+recalc();log("FIN COMPASS V4 institutional environment ready");
+</script>
+</body></html>
