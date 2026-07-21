@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FIN COMPASS V4 — Interactive Business Plan Forms</title>
+<style>
+:root{
+  --bg:#08111f; --panel:#0f1b2d; --panel2:#13243b; --line:#263b58;
+  --text:#eaf1fb; --muted:#8ea2bf; --accent:#4dd7b7; --accent2:#63a4ff;
+  --warn:#f2b84b; --danger:#ff6b7a; --good:#4dd7b7;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:linear-gradient(135deg,#07101d,#0b1728 55%,#08121f);color:var(--text)}
+.app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.sidebar{background:rgba(8,17,31,.96);border-right:1px solid var(--line);padding:24px 16px;position:sticky;top:0;height:100vh}
+.brand{font-size:20px;font-weight:800;letter-spacing:.8px}.brand span{color:var(--accent)}
+.sub{font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:1.5px}
+.nav{margin-top:28px;display:flex;flex-direction:column;gap:7px}
+.nav button{background:transparent;border:0;color:var(--muted);text-align:left;padding:12px 14px;border-radius:10px;cursor:pointer;font-size:14px}
+.nav button.active,.nav button:hover{background:var(--panel2);color:#fff}
+.sidebar .savebox{position:absolute;left:16px;right:16px;bottom:20px}
+.btn{border:0;border-radius:10px;padding:11px 14px;cursor:pointer;font-weight:700}
+.btn-primary{background:linear-gradient(90deg,var(--accent),#42b9ee);color:#04131d;width:100%}
+.btn-secondary{background:var(--panel2);color:#fff;border:1px solid var(--line)}
+.main{padding:24px 28px 60px}
+.topbar{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:22px}
+.title h1{font-size:26px;margin:0 0 6px}.title p{margin:0;color:var(--muted)}
+.progress-card{min-width:320px;background:var(--panel);border:1px solid var(--line);padding:14px;border-radius:14px}
+.progress-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:8px;color:var(--muted)}
+.bar{height:9px;background:#0a1422;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.card{background:rgba(15,27,45,.92);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 12px 28px rgba(0,0,0,.18)}
+.card h3{margin:0 0 14px;font-size:16px}.card p.help{color:var(--muted);font-size:13px;margin-top:-7px}
+.col-12{grid-column:span 12}.col-8{grid-column:span 8}.col-6{grid-column:span 6}.col-4{grid-column:span 4}.col-3{grid-column:span 3}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+input,select,textarea{width:100%;background:#0a1626;border:1px solid var(--line);color:#fff;padding:11px 12px;border-radius:9px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
+textarea{min-height:100px;resize:vertical}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.full{grid-column:1/-1}
+.section{display:none}.section.active{display:block}
+.metric{padding:16px;border:1px solid var(--line);border-radius:13px;background:linear-gradient(145deg,#12243b,#0b1829)}
+.metric .k{font-size:12px;color:var(--muted)}.metric .v{font-size:25px;font-weight:800;margin-top:7px}.metric .d{font-size:11px;color:var(--accent);margin-top:5px}
+.chat{height:440px;overflow:auto;padding:8px;display:flex;flex-direction:column;gap:12px}
+.bubble{max-width:78%;padding:12px 14px;border-radius:14px;line-height:1.45;font-size:14px}
+.ai{align-self:flex-start;background:#142944;border:1px solid #27476a}.user{align-self:flex-end;background:#174437;border:1px solid #2d745e}
+.chat-input{display:flex;gap:10px;margin-top:12px}.chat-input input{flex:1}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.chip{background:#10233a;border:1px solid var(--line);color:#cfe0f4;padding:8px 10px;border-radius:99px;cursor:pointer;font-size:12px}
+.status{font-size:11px;padding:4px 8px;border-radius:99px;background:#183b32;color:#6ee5c9}
+.table{width:100%;border-collapse:collapse}.table th,.table td{padding:11px;border-bottom:1px solid var(--line);font-size:13px;text-align:left}.table th{color:var(--muted)}
+.note{padding:12px;border-left:3px solid var(--accent2);background:#102038;color:#cbd9ec;font-size:13px;border-radius:8px}
+.footer-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{position:relative;height:auto}.savebox{position:static!important;margin-top:20px}.nav{display:grid;grid-template-columns:repeat(2,1fr)}.topbar{flex-direction:column;align-items:stretch}.grid{display:block}.card{margin-bottom:14px}.form-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">FIN <span>COMPASS</span></div>
+  <div class="sub">V4 Interactive Intake System</div>
+  <div class="nav">
+    <button class="active" data-section="conversation">1. AI Conversation</button>
+    <button data-section="project">2. Project</button>
+    <button data-section="company">3. Company</button>
+    <button data-section="market">4. Market</button>
+    <button data-section="investment">5. Investment</button>
+    <button data-section="operations">6. Operations</button>
+    <button data-section="financing">7. Financing</button>
+    <button data-section="results">8. Live Results</button>
+  </div>
+  <div class="savebox">
+    <button class="btn btn-primary" onclick="saveProject()">Save Project</button>
+    <button class="btn btn-secondary" style="width:100%;margin-top:9px" onclick="openInvestorEdition()">Generate Business Plan →</button>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="title">
+      <h1>Living Business Plan Intake</h1>
+      <p>One answer updates the project model, financial outputs and investor readiness.</p>
+    </div>
+    <div class="progress-card">
+      <div class="progress-row"><span>Project completeness</span><strong id="progressText">0%</strong></div>
+      <div class="bar"><i id="progressBar"></i></div>
+    </div>
+  </div>
+
+  <section id="conversation" class="section active">
+    <div class="grid">
+      <div class="card col-8">
+        <h3>AI Project Interview <span class="status">LIVE</span></h3>
+        <p class="help">The AI asks one question at a time and stores each answer as structured project data.</p>
+        <div class="chat" id="chat">
+          <div class="bubble ai">Welcome. What business or investment project would you like to create, acquire or finance?</div>
+        </div>
+        <div class="chips">
+          <button class="chip" onclick="quickAnswer('I want to build a hotel in Lefkada')">Hotel in Lefkada</button>
+          <button class="chip" onclick="quickAnswer('I want to build a food processing factory')">Food factory</button>
+          <button class="chip" onclick="quickAnswer('I want to acquire an existing company')">Company acquisition</button>
+        </div>
+        <div class="chat-input">
+          <input id="chatInput" placeholder="Type your answer..." onkeydown="if(event.key==='Enter')sendChat()" />
+          <button class="btn btn-primary" style="width:auto" onclick="sendChat()">Send</button>
+        </div>
+      </div>
+      <div class="card col-4">
+        <h3>Data captured</h3>
+        <table class="table" id="capturedTable">
+          <tr><th>Field</th><th>Value</th></tr>
+        </table>
+        <div class="note" style="margin-top:12px">All answers are available for manual review in the structured forms.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="project" class="section">
+    <div class="card">
+      <h3>Project Information</h3>
+      <div class="form-grid">
+        <div><label>Project name</label><input data-field="projectName" placeholder="Lefkada Hotel Development"></div>
+        <div><label>Project type</label><select data-field="projectType"><option value="">Select</option><option>New development</option><option>Acquisition</option><option>Expansion</option><option>Refinancing</option></select></div>
+        <div><label>Industry</label><input data-field="industry" placeholder="Hospitality"></div>
+        <div><label>Country</label><input data-field="country" value="Greece"></div>
+        <div><label>Location</label><input data-field="location" placeholder="Lefkada"></div>
+        <div><label>Target start date</label><input data-field="startDate" type="date"></div>
+        <div class="full"><label>Project description</label><textarea data-field="description" placeholder="Describe the project, investment objective and expected outcome."></textarea></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="company" class="section">
+    <div class="card">
+      <h3>Company & Sponsor</h3>
+      <div class="form-grid">
+        <div><label>Company name</label><input data-field="companyName"></div>
+        <div><label>Legal form</label><select data-field="legalForm"><option value="">Select</option><option>LLC</option><option>SA</option><option>IKE</option><option>Partnership</option><option>To be incorporated</option></select></div>
+        <div><label>Year established</label><input data-field="yearEstablished" type="number"></div>
+        <div><label>Employees</label><input data-field="employees" type="number"></div>
+        <div><label>Management experience (years)</label><input data-field="managementExperience" type="number"></div>
+        <div><label>Sponsor equity available (€)</label><input data-field="equityAvailable" type="number"></div>
+        <div class="full"><label>Management team and shareholder structure</label><textarea data-field="managementTeam"></textarea></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="market" class="section">
+    <div class="card">
+      <h3>Market & Commercial Assumptions</h3>
+      <div class="form-grid">
+        <div><label>Target customer</label><input data-field="targetCustomer" placeholder="International leisure travellers"></div>
+        <div><label>Primary market</label><input data-field="primaryMarket" placeholder="Greece / Europe"></div>
+        <div><label>Estimated annual market size (€)</label><input data-field="marketSize" type="number"></div>
+        <div><label>Expected market share (%)</label><input data-field="marketShare" type="number" step="0.1"></div>
+        <div><label>Average selling price (€)</label><input data-field="sellingPrice" type="number"></div>
+        <div><label>Annual sales volume</label><input data-field="salesVolume" type="number"></div>
+        <div class="full"><label>Main competitors</label><textarea data-field="competitors"></textarea></div>
+        <div class="full"><label>Competitive advantage</label><textarea data-field="competitiveAdvantage"></textarea></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="investment" class="section">
+    <div class="card">
+      <h3>Investment Cost</h3>
+      <div class="form-grid">
+        <div><label>Land (€)</label><input data-field="landCost" type="number"></div>
+        <div><label>Buildings & construction (€)</label><input data-field="buildingCost" type="number"></div>
+        <div><label>Equipment (€)</label><input data-field="equipmentCost" type="number"></div>
+        <div><label>Technology & software (€)</label><input data-field="technologyCost" type="number"></div>
+        <div><label>Studies, permits & professional fees (€)</label><input data-field="professionalFees" type="number"></div>
+        <div><label>Pre-opening & launch (€)</label><input data-field="preopeningCost" type="number"></div>
+        <div><label>Initial working capital (€)</label><input data-field="workingCapital" type="number"></div>
+        <div><label>Contingency (%)</label><input data-field="contingencyPct" type="number" value="5"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="operations" class="section">
+    <div class="card">
+      <h3>Operations & Revenue Drivers</h3>
+      <div class="form-grid">
+        <div><label>Available units / capacity</label><input data-field="capacity" type="number" placeholder="80 rooms"></div>
+        <div><label>Utilization / occupancy (%)</label><input data-field="utilization" type="number" value="65"></div>
+        <div><label>Average price per unit (€)</label><input data-field="unitPrice" type="number" value="180"></div>
+        <div><label>Operating days per year</label><input data-field="operatingDays" type="number" value="365"></div>
+        <div><label>Variable cost as % of revenue</label><input data-field="variableCostPct" type="number" value="22"></div>
+        <div><label>Annual payroll (€)</label><input data-field="payroll" type="number"></div>
+        <div><label>Other fixed operating costs (€)</label><input data-field="fixedCosts" type="number"></div>
+        <div><label>Annual revenue growth (%)</label><input data-field="revenueGrowth" type="number" value="4"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="financing" class="section">
+    <div class="card">
+      <h3>Financing Structure</h3>
+      <div class="form-grid">
+        <div><label>Equity contribution (€)</label><input data-field="equity" type="number"></div>
+        <div><label>Grant / subsidy (€)</label><input data-field="grant" type="number"></div>
+        <div><label>Loan amount (€)</label><input data-field="loan" type="number"></div>
+        <div><label>Interest rate (%)</label><input data-field="interestRate" type="number" step="0.1" value="5.5"></div>
+        <div><label>Loan term (years)</label><input data-field="loanTerm" type="number" value="15"></div>
+        <div><label>Grace period (years)</label><input data-field="gracePeriod" type="number" value="1"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="results" class="section">
+    <div class="grid">
+      <div class="card col-3 metric"><div class="k">Total investment</div><div class="v" id="mInvestment">€0</div><div class="d">Calculated from CAPEX</div></div>
+      <div class="card col-3 metric"><div class="k">Annual revenue</div><div class="v" id="mRevenue">€0</div><div class="d">Capacity × utilization × price</div></div>
+      <div class="card col-3 metric"><div class="k">EBITDA</div><div class="v" id="mEbitda">€0</div><div class="d">Live operating result</div></div>
+      <div class="card col-3 metric"><div class="k">Funding gap</div><div class="v" id="mGap">€0</div><div class="d">Investment less sources</div></div>
+      <div class="card col-4 metric"><div class="k">EBITDA margin</div><div class="v" id="mMargin">0%</div><div class="d">Operating efficiency</div></div>
+      <div class="card col-4 metric"><div class="k">Annual debt service</div><div class="v" id="mDebtService">€0</div><div class="d">Indicative annuity</div></div>
+      <div class="card col-4 metric"><div class="k">Indicative DSCR</div><div class="v" id="mDscr">0.00x</div><div class="d">EBITDA / debt service</div></div>
+      <div class="card col-12">
+        <h3>Automated interpretation</h3>
+        <div id="interpretation" class="note">Enter project and financial assumptions to generate an investment interpretation.</div>
+      </div>
+      <div class="card col-12">
+        <h3>Dependency update log</h3>
+        <table class="table" id="logTable"><tr><th>Time</th><th>Changed field</th><th>Engines updated</th></tr></table>
+      </div>
+    </div>
+  </section>
+</main>
+</div>
+
+<script>
+const state = {};
+const questions = [
+ {key:'projectName', q:'What would you like to call this project?'},
+ {key:'industry', q:'Which industry or business sector does it belong to?'},
+ {key:'location', q:'Where will the project be located?'},
+ {key:'investmentEstimate', q:'What is the estimated total investment amount in euros?'},
+ {key:'capacity', q:'What is the main operating capacity, for example number of rooms, units or annual production?'},
+ {key:'utilization', q:'What utilization or occupancy rate do you expect in the first year?'},
+ {key:'unitPrice', q:'What is the average selling price per unit?'},
+ {key:'equity', q:'How much equity will the sponsors contribute?'}
+];
+let qIndex = 0;
+
+document.querySelectorAll('.nav button').forEach(btn=>{
+ btn.onclick=()=>{
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(btn.dataset.section).classList.add('active');
+ };
+});
+
+document.querySelectorAll('[data-field]').forEach(el=>{
+ el.addEventListener('input',()=>{
+   state[el.dataset.field]=el.value;
+   logChange(el.dataset.field);
+   calculate();
+   updateProgress();
+   syncCaptured();
+ });
+});
+
+function quickAnswer(t){document.getElementById('chatInput').value=t;sendChat()}
+function sendChat(){
+ const input=document.getElementById('chatInput');
+ const text=input.value.trim(); if(!text)return;
+ addBubble(text,'user'); input.value='';
+ if(qIndex===0 && !state.initialIdea){
+   state.initialIdea=text;
+   const lower=text.toLowerCase();
+   if(lower.includes('hotel')){setField('industry','Hospitality');setField('projectType','New development')}
+   if(lower.includes('lefkada'))setField('location','Lefkada');
+   setTimeout(()=>askNext(),250);
+ }else{
+   const q=questions[Math.max(0,qIndex-1)];
+   if(q){let val=text.replace(/[€,]/g,'').replace('%',''); state[q.key]=val; setField(q.key,val)}
+   setTimeout(()=>askNext(),250);
+ }
+ syncCaptured();calculate();updateProgress();
+}
+function askNext(){
+ if(qIndex<questions.length){
+   addBubble(questions[qIndex].q,'ai'); qIndex++;
+ } else addBubble('Thank you. The first structured project profile is ready. Review the forms and open Live Results.','ai');
+}
+function addBubble(text,who){
+ const d=document.createElement('div');d.className='bubble '+who;d.textContent=text;
+ const chat=document.getElementById('chat');chat.appendChild(d);chat.scrollTop=chat.scrollHeight;
+}
+function setField(k,v){
+ state[k]=v;
+ const el=document.querySelector(`[data-field="${k}"]`);
+ if(el)el.value=v;
+}
+function num(k){return parseFloat(state[k]||document.querySelector(`[data-field="${k}"]`)?.value||0)||0}
+function euro(v){return new Intl.NumberFormat('en-IE',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(v||0)}
+function calculate(){
+ const base=num('landCost')+num('buildingCost')+num('equipmentCost')+num('technologyCost')+num('professionalFees')+num('preopeningCost')+num('workingCapital');
+ const investment=base*(1+num('contingencyPct')/100) || num('investmentEstimate');
+ const revenue=num('capacity')*(num('utilization')/100)*num('unitPrice')*num('operatingDays');
+ const variable=revenue*num('variableCostPct')/100;
+ const ebitda=revenue-variable-num('payroll')-num('fixedCosts');
+ const sources=num('equity')+num('grant')+num('loan');
+ const gap=Math.max(0,investment-sources);
+ const margin=revenue?ebitda/revenue*100:0;
+ const r=num('interestRate')/100, n=num('loanTerm'), loan=num('loan');
+ const debt=(loan&&n)?(r?loan*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1):loan/n):0;
+ const dscr=debt?ebitda/debt:0;
+ document.getElementById('mInvestment').textContent=euro(investment);
+ document.getElementById('mRevenue').textContent=euro(revenue);
+ document.getElementById('mEbitda').textContent=euro(ebitda);
+ document.getElementById('mGap').textContent=euro(gap);
+ document.getElementById('mMargin').textContent=margin.toFixed(1)+'%';
+ document.getElementById('mDebtService').textContent=euro(debt);
+ document.getElementById('mDscr').textContent=dscr.toFixed(2)+'x';
+ let msg='Enter project and financial assumptions to generate an investment interpretation.';
+ if(revenue>0){
+   msg=`The project currently generates estimated annual revenue of ${euro(revenue)} and EBITDA of ${euro(ebitda)}. `;
+   msg+=dscr>=1.3?'Debt service capacity appears acceptable under the current assumptions. ':dscr>0?'Debt service capacity is currently weak and the financing structure should be revised. ':'Add loan assumptions to assess debt capacity. ';
+   msg+=gap>0?`An uncovered funding gap of ${euro(gap)} remains.`:'The entered financing sources cover the estimated investment cost.';
+ }
+ document.getElementById('interpretation').textContent=msg;
+}
+function updateProgress(){
+ const fields=[...document.querySelectorAll('[data-field]')];
+ const completed=fields.filter(x=>String(x.value).trim()!=='').length;
+ const pct=Math.round(completed/fields.length*100);
+ document.getElementById('progressText').textContent=pct+'%';
+ document.getElementById('progressBar').style.width=pct+'%';
+}
+function syncCaptured(){
+ const tbl=document.getElementById('capturedTable');
+ tbl.innerHTML='<tr><th>Field</th><th>Value</th></tr>';
+ Object.entries(state).filter(([k,v])=>v!=='' && ['initialIdea','projectName','industry','location','investmentEstimate','capacity','utilization','unitPrice','equity'].includes(k)).forEach(([k,v])=>{
+  const tr=document.createElement('tr');tr.innerHTML=`<td>${k}</td><td>${v}</td>`;tbl.appendChild(tr);
+ });
+}
+let lastLog=0;
+function logChange(field){
+ const now=Date.now(); if(now-lastLog<350)return; lastLog=now;
+ const tbl=document.getElementById('logTable');
+ const tr=document.createElement('tr');
+ tr.innerHTML=`<td>${new Date().toLocaleTimeString()}</td><td>${field}</td><td>Financial Model · Valuation · Risk · Funding · Business Plan</td>`;
+ tbl.appendChild(tr);
+}
+function saveProject(){
+ document.querySelectorAll('[data-field]').forEach(el=>state[el.dataset.field]=el.value);
+ localStorage.setItem('finCompassV4Project',JSON.stringify(state));
+ alert('Project saved locally in this browser.');
+}
+
+function buildTransferPayload(){
+  document.querySelectorAll('[data-field]').forEach(el=>state[el.dataset.field]=el.value);
+  const n=k=>parseFloat(state[k]||0)||0;
+  const base=n('landCost')+n('buildingCost')+n('equipmentCost')+n('technologyCost')+
+             n('professionalFees')+n('preopeningCost')+n('workingCapital');
+  const totalInvestment=(base?base*(1+n('contingencyPct')/100):n('investmentEstimate'));
+  const annualRevenue=n('capacity')*(n('utilization')/100)*n('unitPrice')*n('operatingDays');
+  const ebitda=annualRevenue-(annualRevenue*n('variableCostPct')/100)-n('payroll')-n('fixedCosts');
+  return {
+    version:"FIN_COMPASS_V4_TRANSFER_1",
+    updatedAt:new Date().toISOString(),
+    project:{
+      name:state.projectName||state.initialIdea||"New Investment Project",
+      type:state.projectType||"New development",
+      industry:state.industry||"General",
+      country:state.country||"Greece",
+      location:state.location||"",
+      description:state.description||state.initialIdea||"",
+      startDate:state.startDate||""
+    },
+    company:{
+      name:state.companyName||"Project Company",
+      legalForm:state.legalForm||"To be incorporated",
+      yearEstablished:state.yearEstablished||"",
+      employees:n('employees'),
+      managementExperience:n('managementExperience'),
+      equityAvailable:n('equityAvailable'),
+      managementTeam:state.managementTeam||""
+    },
+    market:{
+      targetCustomer:state.targetCustomer||"",
+      primaryMarket:state.primaryMarket||"",
+      marketSize:n('marketSize'),
+      marketShare:n('marketShare'),
+      sellingPrice:n('sellingPrice')||n('unitPrice'),
+      salesVolume:n('salesVolume'),
+      competitors:state.competitors||"",
+      competitiveAdvantage:state.competitiveAdvantage||""
+    },
+    investment:{
+      land:n('landCost'), buildings:n('buildingCost'), equipment:n('equipmentCost'),
+      technology:n('technologyCost'), professionalFees:n('professionalFees'),
+      preopening:n('preopeningCost'), workingCapital:n('workingCapital'),
+      contingencyPct:n('contingencyPct'), total:totalInvestment
+    },
+    operations:{
+      capacity:n('capacity'), utilization:n('utilization'), unitPrice:n('unitPrice'),
+      operatingDays:n('operatingDays'), variableCostPct:n('variableCostPct'),
+      payroll:n('payroll'), fixedCosts:n('fixedCosts'),
+      revenueGrowth:n('revenueGrowth'), annualRevenue:annualRevenue, ebitda:ebitda
+    },
+    financing:{
+      equity:n('equity'), grant:n('grant'), loan:n('loan'),
+      interestRate:n('interestRate'), loanTerm:n('loanTerm'), gracePeriod:n('gracePeriod')
+    }
+  };
+}
+function openInvestorEdition(){
+  const payload=buildTransferPayload();
+  localStorage.setItem('finCompassV4SharedProject',JSON.stringify(payload));
+  const encoded=btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+  const target='platform.html#data='+encodeURIComponent(encoded);
+  window.location.href=target;
+}
+
+function loadProject(){
+ const saved=localStorage.getItem('finCompassV4Project');
+ if(saved){
+   Object.assign(state,JSON.parse(saved));
+   Object.entries(state).forEach(([k,v])=>setField(k,v));
+ }
+ calculate();updateProgress();syncCaptured();
+}
+loadProject();
+</script>
+</body>
+</html>
